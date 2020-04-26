@@ -33,19 +33,18 @@ var util = {
 }
 
 // 深度优先
-function DFSClone(source, cacheArray) {
+function DFSClone(source, cacheSet) {
   var target = {}
-  cacheArray = cacheArray || []
+  cacheSet = cacheSet || new Set()
   if (util.isObject(source) || util.isArray(source) || util.isFunction(source)) {
-    var index = cacheArray.indexOf(source)
-    if (index > -1) {
+    if (cacheSet.has(source)) {
       // todo
       target = source
     } else {
       target = getDefaultBySource(source)
-      cacheArray.push(source)
+      cacheSet.add(source)
       for (var attr in source) {
-        target[attr] = DFSClone(source[attr], cacheArray)
+        target[attr] = DFSClone(source[attr], cacheSet)
       }
     }
   }
